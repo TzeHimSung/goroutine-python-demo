@@ -1,7 +1,5 @@
 package main
 
-import "path/filepath"
-
 const (
 	ScriptPath      = "script"
 	SleepScriptName = "sleep.py"
@@ -9,5 +7,6 @@ const (
 )
 
 func main() {
-	TestExec(filepath.Join(ScriptPath, LoopScriptName))
+	//TestExecCommandWithContext(filepath.Join(ScriptPath, LoopScriptName))
+	TestVirtualEnv()
 }
