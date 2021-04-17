@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"log"
 	"os/exec"
+	"syscall"
 	"time"
 )
 
@@ -64,7 +66,7 @@ func RunPyScript(ctx context.Context, scriptName string, n int) {
 	}
 }
 
-func RunPyScriptWithCancel(scriptName string) (pid int) {
+func RunPyScriptRetPid(scriptName string) (pid int) {
 	cmd := exec.Command("python", scriptName)
 	err := cmd.Start()
 	if err != nil {
@@ -73,4 +75,20 @@ func RunPyScriptWithCancel(scriptName string) (pid int) {
 	pid = cmd.Process.Pid
 	fmt.Println("Python process running, pid:", pid)
 	return pid
+}
+
+func RunPyScriptWithContext(ctx context.Context, scriptName string) {
+	cmd := exec.CommandContext(ctx, "python", scriptName)
+	cmd.SysProcAttr = &syscall.SysProcAttr{}
+	var b bytes.Buffer
+	cmd.Stdout = &b
+	cmd.Stderr = &b
+	if err := cmd.Start(); err != nil {
+		fmt.Println(err)
+	}
+	if err := cmd.Wait(); err != nil {
+
+	}
+
+	pid = cmd.Process.Pid
 }
