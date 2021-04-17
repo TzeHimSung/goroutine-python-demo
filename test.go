@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os/exec"
 	"strconv"
@@ -71,7 +72,7 @@ func TestPyScript(scriptName string) {
 func TestExec(scriptName string) {
 	// test running and killing python process with PID
 	// create process
-	pid = RunPyScriptWithCancel(scriptName)
+	pid = RunPyScriptRetPid(scriptName)
 	time.Sleep(10 * time.Second)
 	KillProcessByPID(pid)
 }
@@ -82,4 +83,12 @@ func KillProcessByPID(pid int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func TestExecCommandWithContext(scriptName string) {
+	ctx, cancel := context.WithCancel(context.Background())
+	go RunPyScriptWithContext(ctx, scriptName)
+	fmt.Println("Pid is: ", pid)
+	time.Sleep(2 * time.Second)
+	cancel()
 }
