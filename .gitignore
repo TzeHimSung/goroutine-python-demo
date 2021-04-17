@@ -3,3 +3,6 @@ output.txt
 
 # venv
 testProject/venv
+
+#.idea
+.idea
